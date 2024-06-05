@@ -31,7 +31,7 @@
                     <div class="row g-4 mb-4">
                         <div class="col-sm-auto">
                             <div>
-                                <a href="{{ route('addProduct') }}" class="btn btn-success" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
+                                <a href="{{ route('createProduct') }}" class="btn btn-success" id="addproduct-btn"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
                             </div>
                         </div>
                         <div class="col-sm">
@@ -92,7 +92,7 @@
                                             <td>{{ \Carbon\Carbon::parse($product->updated_at)->format('d M, Y h:i A') }}</td>
                                             <td>
                                                 <div class="d-flex">
-                                                    <a onclick="return confirm('Are you sure you want to edit the product')" class="dropdown-item remove-list text-success" href=""><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a>
+                                                    <a onclick="return confirm('Are you sure you want to edit the product')" class="dropdown-item remove-list text-success" href="{{ route('editProduct', $product->id) }}"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a>
 
                                                     <a onclick="return confirm('Are you sure you want to delete this product')" sclass="dropdown-item remove-list text-danger" href="{{ route('deleteProduct', $product->id)}}"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Delete</a>
                                                 </div>

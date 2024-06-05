@@ -61,7 +61,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function(){
 
 
     //ROUTE TO ADD PRODUCT
-    Route::post('addProduct', [AdminController::class, 'addProduct'])->name('addProduct');
+    Route::post('addProduct', [AdminController::class, 'addProduct'])->name('addProduct');//post for addProject
 
 
 
@@ -74,9 +74,27 @@ Route::middleware(['auth', 'isAdmin'])->group(function(){
     Route::get('/deleteProduct/{id}', [AdminController::class, 'deleteProduct'])->name('deleteProduct');
 
 
+    //EDIT PRODUCT
+    Route::get('/editProduct/{id}', [AdminController::class, 'editProduct'])->name('editProduct');
+
+
+
+    //UPDATE PRODUCT
+    Route::post('/updateProduct/{id}', [AdminController::class, 'updateProduct'])->name('updateProduct');
+
+
+
+    //USER LIST ROUTE
+    Route::get('admin/userList', [AdminController::class, 'userList'])->name('userList');
+
+    
+
    
     //ADMIN LOGOUT
     Route::get('admin_logout', [AdminController::class, 'admin_logout'])->name('admin_logout');
+
+
+    
 });
 
 

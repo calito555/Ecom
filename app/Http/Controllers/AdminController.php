@@ -89,14 +89,14 @@ class AdminController extends Controller
         $product->discountPrice = $request->discountPrice;
         $product->quantity = $request->Quantity;
         $product->warranty = $request->warranty;
-        $product->featuredProduct = $request->featuredProduct;
+        $product->featureProduct = $request->featuredProduct;
 
         //ADDING AN IMAGE
-        if($request->hasFile('productImage')){
+        if ($request->hasFile('productImage')) {
             $image = $request->file('productImage');
             $productImage = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('productFolder'), $productImage);
-            $product->$productImage->$productImage;
+            $product->productImage = $productImage;
         }
 
         $product->save();
@@ -121,6 +121,75 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Product deleted successfully');
 
     }
+
+
+
+
+    //FUNCTION TO EDIT OUR PRODUCT
+    // public function editProduct()
+    // {
+    //     return view('admin.editProduct');
+    // }
+
+
+    public function editProduct($productId)
+    {
+        $product = Product::findorFail($productId);
+        return view('admin.editProduct', compact('product'));
+    }
+
+
+    
+    //FUNCTION TO UPDATE PRODUCT--->>> since we are interacting with a form we make use of REQUEST
+    public function updateProduct(Request $request, $id)
+    {
+        $request->validate([
+            'productName'=>'required|max:255',
+            'productCategory'=> 'required|max:255',
+            'productImage'=> ['nullable','file', 'max:10000'],
+            'productDescription'=> 'required',
+            'manufacturerName'=> 'required|max:255',
+            'status' => 'required',
+            'productPrice' => 'required',
+            'discountPrice' => 'nullable',
+            'Quantity' => 'nullable|max:255',
+            'warranty' => 'nullable|max:255',
+        ]);
+
+        $product = Product::find($id);
+        $product->productName = $request->productName;
+        $product->productCategory = $request->productCategory;
+        $product->productDescription = $request->productDescription;
+        $product->manufacturerName = $request->manufacturerName;
+        $product->status = $request->status;
+        $product->productPrice = $request->productPrice;
+        $product->discountPrice = $request->discountPrice;
+        $product->quantity = $request->Quantity;
+        $product->warranty = $request->warranty;
+        $product->featureProduct = $request->featuredProduct;
+
+        //ADDING AN IMAGE
+        if ($request->hasFile('productImage')) {
+            $image = $request->file('productImage');
+            $productImage = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('productFolder'), $productImage);
+            $product->productImage = $productImage;
+        }
+
+        $product->save();
+        return redirect()->route('Products')->with('message', 'Product updated successfully');
+    }
+
+
+
+    //FUNCTION FOR USERLIST
+    public function userList()
+    {
+        return view('admin.user_list');
+    }
+
+
+
 
 
     //ADMIN LOGOUT FUCTION

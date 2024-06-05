@@ -93,7 +93,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="users-list.html" class="nav-link menu-link"> <i class="bi bi-person-bounding-box"></i> <span data-key="t-users-list">Users List</span> </a>
+                            <a href="{{ route('userList') }}" class="nav-link menu-link"> <i class="bi bi-person-bounding-box"></i> <span data-key="t-users-list">Users List</span> </a>
                         </li>
 
                         <li class="nav-item">

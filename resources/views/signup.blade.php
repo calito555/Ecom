@@ -83,7 +83,7 @@
                             <li><a href="#" class="btn btn-facebook"><i class="ion-social-facebook"></i>Facebook</a></li>
                             <li><a href="#" class="btn btn-google"><i class="ion-social-googleplus"></i>Google</a></li>
                         </ul>
-                        <div class="form-note text-center">Already have an account? <a href="login.html">Log in</a></div>
+                        <div class="form-note text-center">Already have an account? <a href="{{ route('login') }}">Log in</a></div>
                     </div>
                 </div>
             </div>

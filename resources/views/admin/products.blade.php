@@ -59,6 +59,7 @@
                                             <th scope="col">Description</th>
                                             <th scope="col">Price</th>
                                             <th scope="col">Discount Price</th>
+                                            <th scope="col">Quantity</th>
                                             <th scope="col">Created At</th>
                                             <th scope="col">Updated At</th>
                                             <th scope="col">Action</th>
@@ -88,6 +89,7 @@
                                             <td class="gridjs-td">
                                                 <div> {{$product->discountPrice ?? ''}}  </div>
                                             </td>
+                                            <td>{{ $product->quantity }}</td>
                                             <td>{{ \Carbon\Carbon::parse($product->created_at)->format('d M, Y h:i A') }}</td>
                                             <td>{{ \Carbon\Carbon::parse($product->updated_at)->format('d M, Y h:i A') }}</td>
                                             <td>

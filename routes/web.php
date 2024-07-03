@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\FlutterwaveController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +42,41 @@ Route::post('store', [UserController::class, 'store'])->name('store_user');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+//ROUTE FOR PRODUCT DETAILS
+Route::get('product_details/{id}', [UserController::class, 'product_details'])->name('product_details');
+
+//ADDING PRODUCT TO CART ROUTE
+Route::post('/addToCart/{id}', [UserController::class, 'addToCart'])->name('addToCart');
+
+//ROUTE TO SHOW OUR CARTS
+Route::get('/carts', [UserController::class, 'carts'])->name('carts');
+
+//ROUTE TO DELETE OUR CART
+Route::get('/deleteCart/{id}', [UserController::class, 'deleteCart'])->name('deleteCart');
+
+//ROUTE FOR PAY ON DELIVERY
+Route::get('/payOndelivery', [UserController::class, 'payOnDelivery'])->name('payOnDelivery');
+
+//ROUTE FOR PROCEED DELIVERY
+Route::post('/proceedDelivery', [UserController::class, 'proceedDelivery'])->name('proceedDelivery');
+
+
+
+//PRODUCT CATEGORY
+Route::get('/productCategory/{id}', [UserController::class, 'productCategory'])->name('productCategory');
+
+
+
+
+
+
+
+//ROUTE TO SEARCH A PARTICULAR PRODUCT EITHER BY NAME, ID, OR CATEGORY
+// Route::get('/search', [UserController::class, 'search'])->name('search');
+
+
+
+
 
 //ROUTE FOR THE ADMIN DASHBOARD (ALL ADMIN AND SUBADMIN MUST BE ENCLOSE WITHIN THIS REGION)
 Route::middleware(['auth', 'isAdmin'])->group(function(){
@@ -61,7 +99,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function(){
 
 
     //ROUTE TO ADD PRODUCT
-    Route::post('addProduct', [AdminController::class, 'addProduct'])->name('addProduct');//post for addProject
+    Route::post('addProduct', [AdminController::class, 'addProduct'])->name('addProduct');//post for addProject because of the Form
 
 
 
@@ -87,7 +125,32 @@ Route::middleware(['auth', 'isAdmin'])->group(function(){
     //USER LIST ROUTE
     Route::get('admin/userList', [AdminController::class, 'userList'])->name('userList');
 
+
+    //PENDING ORDER VIEWS
+    Route::get('/pendingOrders', [AdminController::class, 'pendingOrders'])->name('pendingOrders');
+
+
+    //APPROVE ORDER ROUTE
+    Route::get('/approveOrder{id}', [AdminController::class, 'approveOrder'])->name('approveOrder');
+
+
+    //APPROVE ORDER ROUTE
+    Route::get('/disapproveOrder{id}', [AdminController::class, 'disapproveOrder'])->name('disapproveOrder');
+
+
+    //DELETE USERLIST ROUTE
+    Route::get('/deleteUserlist/{id}', [AdminController::class, 'deleteUserlist'])->name('deleteUserlist');
+
+
+    //ROUTE TO VIEW APPROVED ORDERS
+    Route::get('/approvedOrders', [AdminController::class, 'approvedOrders'])->name('approvedOrders');
+
+
+    //ROUTE TO VIEW CANCELLED ORDERS
+    Route::get('/cancelledOrders', [AdminController::class, 'cancelledOrders'])->name('cancelledOrders');
     
+
+
 
    
     //ADMIN LOGOUT
@@ -98,4 +161,63 @@ Route::middleware(['auth', 'isAdmin'])->group(function(){
 });
 
 
+//FORGET PASSWORD
+
+
+// Route to return forget password view
+Route::get('forgetPassword', [ForgotPasswordController::class, 'forgetPassword'])->name('forgetPassword');
+
+//forgot password post to submit the email
+Route::post('forgotPassword', [ForgotPasswordController::class, 'forgotPassword'])->name('forgotPassword.email');
+
+//Route for Confirm code view OR Route to return Confirm code view
+Route::get('confirmCode', [ForgotPasswordController::class, 'confirmCode'])->name('confirmCode.email');
+
+//Route for Confirm code to submit code OR Route to Submit Confirmation code from MAILTRAP & DATADASE
+Route::post('submitPasswordResetCode', [ForgotPasswordController::class, 'submitPasswordResetCode'])->name('submitPasswordResetCode');
+
+
+//Route to Reset Password view OR Route to return Reset Password view
+Route::get('password_reset', [ForgotPasswordController::class, 'password_reset'])->name('password-reset');
+
+
+//Route to submit New Password
+Route::post('createNewPassword', [ForgotPasswordController::class, 'createNewPassword'])->name('createNewPassword');
+
+//Route to resend Code
+Route::get('resend_code/{email}', [ForgotPasswordController::class, 'resend_code'])->name('resend_code');
+
+
+
+
+
+
+
+
+//FLUTTER WAVE PAYMENT ROUTE
+// The page that displays the payment form
+Route::get('payment/{grandTotal}', [FlutterwaveController::class, 'payment'])->name('payment');
+
+// The route that the button calls to initialize payment
+Route::post('/pay/{grandTotal}', [FlutterwaveController::class, 'initialize'])->name('pay');
+
+// The callback url after a payment
+Route::get('/rave/callback', [FlutterwaveController::class, 'callback'])->name('callback');
+
+
+
+
+
+//USER PROFILE DASHBOARD ROUTE
+Route::get('/account', [ProfileController::class, 'account'])->name('account');
+
+
+//PROFILE ROUTE
+Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
+Route::post('/saveProfile', [ProfileController::class, 'saveProfile'])->name('saveProfile');
+
+
+//ROUTE TO UPDATE PASSWORD
+Route::get('/update_password', [ProfileController::class, 'update_password'])->name('update_password');
+Route::post('/update_user_password', [ProfileController::class, 'updateUserPassword'])->name('updateUserPassword');
 

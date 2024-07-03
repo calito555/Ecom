@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -63,7 +65,7 @@ class AdminController extends Controller
     }
 
 
-
+    //ADDING PRODUCT FUNCTION
     public function addProduct(Request $request)
     {
         $request->validate([
@@ -75,7 +77,7 @@ class AdminController extends Controller
             'status' => 'required',
             'productPrice' => 'required',
             'discountPrice' => 'nullable',
-            'Quantity' => 'nullable|max:255',
+            'quantity' => 'nullable|max:255',
             'warranty' => 'nullable|max:255',
         ]);
 
@@ -87,7 +89,7 @@ class AdminController extends Controller
         $product->status = $request->status;
         $product->productPrice = $request->productPrice;
         $product->discountPrice = $request->discountPrice;
-        $product->quantity = $request->Quantity;
+        $product->quantity = $request->quantity;
         $product->warranty = $request->warranty;
         $product->featureProduct = $request->featuredProduct;
 
@@ -185,7 +187,89 @@ class AdminController extends Controller
     //FUNCTION FOR USERLIST
     public function userList()
     {
-        return view('admin.user_list');
+        $users = User::where('role_as', '0')->paginate(20);
+        return view('admin.user_list', compact('users'));
+    }
+
+
+
+    //FUNCTION TO DELETE USERLIST
+    public function deleteUserlist($id)
+    {
+        // dd($id);
+        $deleteUserlist = User::find($id);
+        $deleteUserlist->delete();
+        return redirect()->back()->with('success', 'User deleted successfully');
+
+    }
+
+
+
+
+    // FUNCTION FOR PENDING ORDERS
+    public function pendingOrders()
+    {
+        $pendingOrders = Order::where('deliveryStatus', 'Processing')->get();  //$pendingOrders ==> is holding all Orders where Delivery Status is Equal to Processing
+        return view('admin.pendingOrders', compact('pendingOrders'));
+    }
+
+
+    //FUNCTION FOR APPROVE ORDER
+    public function approveOrder($id)
+    {
+        //FINDING THE ORDER BY ID
+        $order = Order::findorFail($id);
+
+        //SET THE DELIVERY STATUS TO APPROVED
+        $order->deliveryStatus = 'Approved';
+
+
+        //GETTING THE ORDERED QUANTITY AND ASIGNING IT TO A VARIABLE CALLED productQuantity
+        $productQuantity = $order->productQuantity;
+
+        //GETTING THE PRODUCT ID FROM ORDER
+        $productId = $order->productId;
+
+
+        //FINDING THE PRODUCTS BY ID
+        $product = Product::find($productId);
+
+        //SUBTRACT THE ORDERED QUANTITY FROM THE PRODUCT QUANTITY
+        $product->quantity -= $productQuantity;
+
+        //SAVE THE UPDATED PRODCUT QUANTITY
+        $product->save();
+
+        //SAVE THE UPDATED ORDER
+        $order->save();
+
+        return redirect()->back()->with('message', 'Order has been approved and product quantity updated');
+    }
+
+
+    //FUNCTION TO DISAPPROVE ORDER
+    public function disapproveOrder($id)
+    {
+        $order = Order::findorFail($id);
+        $order->deliveryStatus = ('Cancelled');
+        $order->save();
+        return redirect()->back()->with('message', 'Order have been Cancelled');
+    }
+
+
+    //FUNCTION TO VIEW APPROVED ORDER
+    public function approvedOrders()
+    {
+        $approvedOrders = Order::where('deliveryStatus', 'Approved')->get();
+        return view('admin.approvedOrders', compact('approvedOrders'));
+    }
+
+
+    //FUNCTION TO VIEW ALL CANCELLED ORDERS
+    public function cancelledOrders()
+    {
+        $cancelledOrders = Order::where('deliveryStatus', 'Cancelled')->get();
+        return view('admin.cancelledOrders', compact('cancelledOrders'));
     }
 
 

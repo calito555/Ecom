@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -38,6 +40,14 @@ class AppServiceProvider extends ServiceProvider
             //CATEGORY LINKS USED THE HOME PAGE HEADER
             $categoryLinks = Category::all();
             $view->with('categoryLinks', $categoryLinks);
+
+
+            //CHECK THE TOTAL NUMBER OF ITEMS A PARTICULAR USER HAVE IN THE CART TABLE
+            if(Auth::user()) {
+                $userId = Auth::user()->id;
+                $cartCount = Cart::where('userId', $userId)->count();
+                $view->with('cartCount', $cartCount);
+            }
 
         });
     }

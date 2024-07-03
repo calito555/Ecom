@@ -45,4 +45,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    //FUNCTION FOR ONE TO ONE(ONE USER TO ONE PROFILE)
+    public function profile()
+    {
+        return $this->hasOne(Profile::class, 'userId');
+    }
+
+
+    //ONE USER TO MANY ORDERS
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'userId');
+    }
 }
